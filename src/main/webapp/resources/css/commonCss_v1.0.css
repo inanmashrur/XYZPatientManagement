@@ -1,0 +1,46 @@
+.error {
+    color: red !important;
+}
+
+.disable-select {
+    pointer-events: none;
+}
+
+a.notification-count {
+    color: #af0101;
+}
+
+.test-cell {
+    max-width: 15rem;
+    white-space : nowrap;
+    overflow : hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.success {
+    color: darkgreen !important;
+}
+
+.failure {
+    color: darkred !important;
+}
+
+.overlay {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0,0,0, 0.3);
+    z-index: 2;
+}
+
+.overlay_content {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
