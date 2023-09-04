@@ -2,6 +2,7 @@ package org.xyz.patientmanagement.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,15 +24,17 @@ public class Doctor extends Persistent {
     private Long id;
 
     @NotNull
+    @Size(max = 255)
     private String education;
 
     @NotNull
+    @Size(max = 255)
     private String specialities;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne
+    @OneToOne(optional = false)
     @NotNull
     private User user;
 

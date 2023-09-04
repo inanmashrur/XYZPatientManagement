@@ -23,11 +23,11 @@ public class Assistant extends Persistent {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne
+    @OneToOne(optional = false)
     @NotNull
     private User user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
     private Doctor doctor;
 

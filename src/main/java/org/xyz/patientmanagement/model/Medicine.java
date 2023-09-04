@@ -4,6 +4,9 @@ import org.xyz.patientmanagement.domain.YesNoMap;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author inanmashrur
@@ -11,15 +14,20 @@ import javax.persistence.Enumerated;
  */
 public class Medicine {
 
+    @NotNull
     private MedicineForm form;
 
+    @NotBlank
     private String name;
 
+    @Size(max = 255)
     private String dosage;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private YesNoMap onFullStomach;
 
+    @Size(max = 255)
     private String frequency;
 
     public MedicineForm getForm() {
