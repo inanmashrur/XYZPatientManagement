@@ -1,7 +1,10 @@
 package org.xyz.patientmanagement.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author inanmashrur
@@ -18,13 +21,15 @@ public class Attachment extends Persistent {
     @SequenceGenerator(name = "attachment", sequenceName = "attachment_seq", allocationSize = 1)
     private long id;
 
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
     @NotNull
+    @Max(1024*1024*5) // 5 MB
     private long size;
 
-    @NotNull
+    @NotBlank
     private String type;
 
     @NotNull

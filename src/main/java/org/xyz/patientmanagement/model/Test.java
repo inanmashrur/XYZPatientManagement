@@ -1,13 +1,17 @@
 package org.xyz.patientmanagement.model;
 
+import javax.validation.constraints.Size;
+
 /**
  * @author inanmashrur
  * @since 6/8/2023
  */
 public class Test {
 
+    @Size(max = 255)
     private String testName;
 
+    @Size(max = 1000)
     private String additionalInfo;
 
     public Test() {
