@@ -1,10 +1,5 @@
 package org.xyz.patientmanagement.controller;
 
-import org.springframework.web.bind.annotation.*;
-import org.xyz.patientmanagement.domain.User;
-import org.xyz.patientmanagement.helper.AuthHelper;
-import org.xyz.patientmanagement.service.AuthService;
-import org.xyz.patientmanagement.validator.AuthValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +7,17 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.xyz.patientmanagement.domain.User;
+import org.xyz.patientmanagement.helper.AuthHelper;
+import org.xyz.patientmanagement.service.AuthService;
+import org.xyz.patientmanagement.validator.AuthValidator;
 
 import javax.servlet.http.HttpSession;
-import java.security.NoSuchAlgorithmException;
 
 import static java.util.Objects.nonNull;
-import static org.xyz.patientmanagement.util.Constants.*;
-import static org.xyz.patientmanagement.util.Util.getHashedValue;
+import static org.xyz.patientmanagement.util.Constants.COMMAND_USER;
+import static org.xyz.patientmanagement.util.Constants.REDIRECT_TO;
 import static org.xyz.patientmanagement.util.Util.getLoggedInUser;
 
 /**
@@ -51,7 +50,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        logger.info("Logging out | User: " + (getLoggedInUser().getUsername()));
+        logger.info("Logging out | User: {}", getLoggedInUser().getUsername());
 
         authHelper.removeSessionData(session);
 
@@ -60,13 +59,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute(COMMAND_USER) User user,
-                        BindingResult bindingResult) throws NoSuchAlgorithmException {
+                        BindingResult bindingResult) {
 
-        user.setPassword(getHashedValue(user.getPassword())); //TODO: should be done using hash & salt
         authValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            logger.warn("Failed login attempt | " + (nonNull(user.getUsername()) ? user.getUsername() : ""));
+            logger.warn("Failed login attempt | {}", nonNull(user.getUsername()) ? user.getUsername() : "");
 
             return LOGIN;
         }
@@ -74,8 +72,9 @@ public class AuthController {
         User loggedInUser = authService.getAuthenticateUser(user);
         authHelper.setUpSessionData(loggedInUser);
 
-        logger.info("New login | User: " + loggedInUser.getUsername());
+        logger.info("New login | User: {}", loggedInUser.getUsername());
 
         return REDIRECT_TO + HOME;
     }
+
 }

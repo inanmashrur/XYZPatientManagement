@@ -1,6 +1,5 @@
 package org.xyz.patientmanagement.util;
 
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -14,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -28,6 +29,9 @@ import static org.xyz.patientmanagement.util.Constants.*;
 public class Util {
 
     private static final String MSG_PAGE = "msg";
+
+    private Util() {
+    }
 
     public static boolean isPathAllowedToAll(String path) {
         List<String> allowedPaths = Arrays.asList("/", "/login", "/auth/login");
@@ -71,6 +75,10 @@ public class Util {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
+        if (isNull(requestAttributes)) {
+            return null;
+        }
+
         return requestAttributes.getRequest();
     }
 
@@ -110,6 +118,23 @@ public class Util {
         return sb.toString();
     }
 
+    public static String getHashedValue(String password, String salt) {
+        try {
+            return getHashedValue(password + salt);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
+
+    }
+
+    public static String generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] saltBytes = new byte[16];
+        random.nextBytes(saltBytes);
+
+        return Base64.getEncoder().encodeToString(saltBytes);
+    }
+
     public static String redirectToMsgPage(RedirectAttributes redirectAttributes,
                                            MessageSourceAccessor msa,
                                            String type,
@@ -125,4 +150,5 @@ public class Util {
     public static String redirectTo(String url) {
         return "redirect:/" + url;
     }
+
 }

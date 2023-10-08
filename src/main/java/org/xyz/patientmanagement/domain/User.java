@@ -28,6 +28,8 @@ public class User extends Persistent {
     @Size(min = 6)
     private String password;
 
+    private String salt;
+
     @NotNull
     private String firstName;
 
@@ -79,6 +81,14 @@ public class User extends Persistent {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getFirstName() {
@@ -149,4 +159,5 @@ public class User extends Persistent {
                 ", status=" + status +
                 '}';
     }
+
 }
