@@ -12,12 +12,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.xyz.patientmanagement.domain.Doctor;
 import org.xyz.patientmanagement.domain.User;
 import org.xyz.patientmanagement.domain.UserType;
+import org.xyz.patientmanagement.helper.UserHelper;
 import org.xyz.patientmanagement.service.DoctorService;
 import org.xyz.patientmanagement.validator.UserValidator;
 
 import javax.validation.Valid;
-
-import java.security.NoSuchAlgorithmException;
 
 import static org.xyz.patientmanagement.util.Constants.*;
 import static org.xyz.patientmanagement.util.Util.*;
@@ -45,6 +44,9 @@ public class DoctorController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private UserHelper userHelper;
+
     @InitBinder(COMMAND_DOCTOR)
     public void initBinderForDoctor(WebDataBinder dataBinder) {
         dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -58,8 +60,7 @@ public class DoctorController {
     }
 
     @PostMapping("/basicInfo")
-    public String saveBasicInfo(@ModelAttribute(COMMAND_DOCTOR) Doctor doctor, BindingResult bindingResult)
-            throws NoSuchAlgorithmException {
+    public String saveBasicInfo(@ModelAttribute(COMMAND_DOCTOR) Doctor doctor, BindingResult bindingResult) {
 
         userValidator.validate(doctor.getUser(), bindingResult);
 
@@ -67,9 +68,7 @@ public class DoctorController {
             return FORM_PAGE_1;
         }
 
-        doctor.getUser().setPassword(getHashedValue(doctor.getUser().getPassword()));
-
-        return redirectTo("doctor/doctorInfo");
+        return redirectTo(FORM_PAGE_2);
     }
 
     @GetMapping("/doctorInfo")
@@ -82,11 +81,10 @@ public class DoctorController {
     @PostMapping("/doctorInfo")
     public String saveDoctorInfo(@Valid @ModelAttribute(COMMAND_DOCTOR) Doctor doctor, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
             return FORM_PAGE_2;
         }
 
-        return redirectTo("doctor/preview");
+        return redirectTo(FORM_PAGE_PREVIEW);
     }
 
     @GetMapping("/preview")
@@ -130,12 +128,15 @@ public class DoctorController {
         User loggedInUser = getLoggedInUser();
 
         if (doctor.isNew()) {
+            userHelper.initializeCredentials(doctor.getUser(), doctor.getUser().getPassword());
             doctor.setCreatedBy(loggedInUser);
             doctor.getUser().setCreatedBy(loggedInUser);
+
             return;
         }
 
         doctor.getUser().setUpdatedBy(loggedInUser);
         doctor.setUpdatedBy(loggedInUser);
     }
+
 }

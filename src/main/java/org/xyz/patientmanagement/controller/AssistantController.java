@@ -12,11 +12,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.xyz.patientmanagement.domain.Assistant;
 import org.xyz.patientmanagement.domain.User;
 import org.xyz.patientmanagement.domain.UserType;
+import org.xyz.patientmanagement.helper.UserHelper;
 import org.xyz.patientmanagement.service.AssistantService;
 import org.xyz.patientmanagement.validator.UserValidator;
-
-import javax.validation.Valid;
-import java.security.NoSuchAlgorithmException;
 
 import static org.xyz.patientmanagement.util.Constants.*;
 import static org.xyz.patientmanagement.util.Util.*;
@@ -40,6 +38,9 @@ public class AssistantController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private UserHelper userHelper;
+
     @InitBinder(COMMAND_ASSISTANT)
     public void initBinderForDoctor(WebDataBinder dataBinder) {
         dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -55,7 +56,7 @@ public class AssistantController {
     @PostMapping("/form")
     public String saveOrUpdate(@ModelAttribute(COMMAND_ASSISTANT) Assistant assistant,
                                BindingResult bindingResult,
-                               SessionStatus sessionStatus) throws NoSuchAlgorithmException {
+                               SessionStatus sessionStatus) {
 
         userValidator.validate(assistant.getUser(), bindingResult);
 
@@ -63,7 +64,6 @@ public class AssistantController {
             return FORM_PAGE;
         }
 
-        assistant.getUser().setPassword(getHashedValue(assistant.getUser().getPassword()));
         prepareForSaveOrUpdate(assistant);
 
         assistantService.saveOrUpdate(assistant);
@@ -93,12 +93,15 @@ public class AssistantController {
         User loggedInUser = getLoggedInUser();
 
         if (assistant.isNew()) {
+            userHelper.initializeCredentials(assistant.getUser(), assistant.getUser().getPassword());
             assistant.setCreatedBy(loggedInUser);
             assistant.getUser().setCreatedBy(loggedInUser);
+
             return;
         }
 
         assistant.getUser().setUpdatedBy(loggedInUser);
         assistant.setUpdatedBy(loggedInUser);
     }
+
 }

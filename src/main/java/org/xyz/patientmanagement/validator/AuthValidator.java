@@ -1,14 +1,15 @@
 package org.xyz.patientmanagement.validator;
 
-import org.xyz.patientmanagement.domain.User;
-import org.xyz.patientmanagement.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.xyz.patientmanagement.domain.User;
+import org.xyz.patientmanagement.service.AuthService;
 
 import static java.util.Objects.isNull;
-import static org.xyz.patientmanagement.util.Constants.*;
+import static org.xyz.patientmanagement.util.Constants.PASSWORD;
+import static org.xyz.patientmanagement.util.Constants.USERNAME;
 
 /**
  * @author inanmashrur
