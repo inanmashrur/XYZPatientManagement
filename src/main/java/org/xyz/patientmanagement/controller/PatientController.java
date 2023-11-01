@@ -10,6 +10,7 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.xyz.patientmanagement.domain.BloodGroup;
 import org.xyz.patientmanagement.domain.Patient;
 import org.xyz.patientmanagement.domain.Prescription;
@@ -19,7 +20,6 @@ import org.xyz.patientmanagement.service.PrescriptionService;
 import org.xyz.patientmanagement.validator.PatientValidator;
 
 import javax.validation.Valid;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +53,7 @@ public class PatientController {
     @InitBinder(COMMAND_PATIENT)
     public void initBinderForDoctor(WebDataBinder dataBinder) {
         dataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(DATE_FORMAT),true));
+        dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(DATE_FORMAT), true));
     }
 
     @GetMapping("/form")
@@ -109,19 +109,28 @@ public class PatientController {
         modelMap.put(BLOOD_GROUP_LIST, BloodGroup.getBloodGroupList());
 
         if (isValidIdentifier(patientId)) {
-             patient = patientService.findActiveById(patientId);
-             prescriptionList = prescriptionService.findAllByPatient(patient);
-             String addNewPrescriptionURL = "/prescription/form?patientId=" + patientId
-                     + "&doctorId=3"; //TODO: will change later -inan
+            patient = patientService.findActiveById(patientId);
+            prescriptionList = prescriptionService.findAllByPatient(patient);
+            String newPrescriptionURL = getNewPrescriptionURL(patientId);
 
-             modelMap.put(COMMAND_PATIENT, patient);
-             modelMap.put(PRESCRIPTION_LIST, prescriptionList);
-             modelMap.put("addNewPrescriptionLink", addNewPrescriptionURL);
+            modelMap.put(COMMAND_PATIENT, patient);
+            modelMap.put(PRESCRIPTION_LIST, prescriptionList);
+            modelMap.put("addNewPrescriptionLink", newPrescriptionURL);
 
-             return;
+            return;
         }
 
         modelMap.put(COMMAND_PATIENT, new Patient());
         modelMap.put(PRESCRIPTION_LIST, prescriptionList);
     }
+
+    private static String getNewPrescriptionURL(long patientId) {
+        Long doctorId = getLoggedInDoctor().getId();
+
+        return UriComponentsBuilder.fromPath("/prescription/form")
+                .queryParam("patientId", patientId)
+                .queryParam("doctorId", doctorId)
+                .toUriString();
+    }
+
 }
