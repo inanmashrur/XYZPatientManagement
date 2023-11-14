@@ -1,8 +1,7 @@
 package org.xyz.patientmanagement.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 import static org.xyz.patientmanagement.domain.Status.ACTIVE;
@@ -23,18 +22,26 @@ public class Patient extends Persistent {
     @SequenceGenerator(name = "patientSeq", sequenceName = "patient_seq", allocationSize = 1)
     private Long id;
 
+    @Size(max = 31)
+    @Column(length = 31)
     private String patientId;
 
     @NotNull
+    @Size(max = 15)
+    @Column(length = 15)
     private String mobileNumber;
 
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String firstName;
 
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String lastName;
 
     @NotNull
+    @Past
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @NotNull
