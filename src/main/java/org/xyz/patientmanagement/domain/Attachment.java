@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
  * @since 26/03/2023
  */
 @Entity
-@Table(name = "attachement")
+@Table(name = "attachment")
 public class Attachment extends Persistent {
 
     private static final long serialVersionUID = 1L;
