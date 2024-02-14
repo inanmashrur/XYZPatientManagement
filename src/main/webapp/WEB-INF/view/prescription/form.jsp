@@ -12,7 +12,8 @@
   User: inanmashrur
   Date: 27/05/23
 --%>
-<html>
+<!DOCTYPE>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -198,9 +199,9 @@
                             <form:errors path="healthMetric.temperature" cssClass="error"/>
 
                             <td>
-                                <form:input path="healthMetric.bpHIgh" class="form-control" type="number"/>
+                                <form:input path="healthMetric.bpHigh" class="form-control" type="number"/>
                             </td>
-                            <form:errors path="healthMetric.bpHIgh" cssClass="error"/>
+                            <form:errors path="healthMetric.bpHigh" cssClass="error"/>
 
                             <td>
                                 <form:input path="healthMetric.bpLow" class="form-control" type="number"/>
@@ -208,9 +209,9 @@
                             <form:errors path="healthMetric.bpLow" cssClass="error"/>
 
                             <td>
-                                <form:input path="healthMetric.hearthRate" class="form-control" type="number"/>
+                                <form:input path="healthMetric.heartRate" class="form-control" type="number"/>
                             </td>
-                            <form:errors path="healthMetric.hearthRate" cssClass="error"/>
+                            <form:errors path="healthMetric.heartRate" cssClass="error"/>
 
                             <td>
                                 <form:input path="healthMetric.sugarLevel" class="form-control" type="number"/>
@@ -419,7 +420,7 @@
                                 <td><c:out value="${attacment.name}"/></td>
                                 <td><c:out value="${attacment.size}"/></td>
                                 <td><c:out value="${attacment.type}"/></td>
-                                <td><img src="data:image/jpeg;base64,${attacment.dataInBase64}" height="100px" width="100px"></td>
+                                <td><img alt="attachment" src="data:image/jpeg;base64,${attacment.dataInBase64}" height="100px" width="100px"></td>
                                 <td>
                                     <button type="button"
                                             class="btn btn-sm btn-danger"

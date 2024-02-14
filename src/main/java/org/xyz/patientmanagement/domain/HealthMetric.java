@@ -1,7 +1,7 @@
 package org.xyz.patientmanagement.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 /**
  * @author inanmashrur
@@ -18,18 +18,33 @@ public class HealthMetric extends Persistent {
     @SequenceGenerator(name = "healthMetricSeq", sequenceName = "health_metric_seq")
     private long id;
 
+    @Positive
+    @DecimalMax("250.0")
     private float height;
 
+    @Positive
+    @DecimalMax("500.0")
     private float weight;
 
+    @Positive
+    @DecimalMin("35.0")
+    @DecimalMax("45.0")
     private float temperature;
 
-    private int bpHIgh;
+    @Positive
+    @Max(value = 200)
+    private int bpHigh;
 
+    @Positive
+    @Max(value = 120)
     private int bpLow;
 
-    private int hearthRate;
+    @Positive
+    @Max(value = 220)
+    private int heartRate;
 
+    @Positive
+    @Max(value = 300)
     private int sugarLevel;
 
     public long getId() {
@@ -64,12 +79,12 @@ public class HealthMetric extends Persistent {
         this.temperature = temperature;
     }
 
-    public int getBpHIgh() {
-        return bpHIgh;
+    public int getBpHigh() {
+        return bpHigh;
     }
 
-    public void setBpHIgh(int bpHIgh) {
-        this.bpHIgh = bpHIgh;
+    public void setBpHigh(int bpHIgh) {
+        this.bpHigh = bpHIgh;
     }
 
     public int getBpLow() {
@@ -80,12 +95,12 @@ public class HealthMetric extends Persistent {
         this.bpLow = bpLow;
     }
 
-    public int getHearthRate() {
-        return hearthRate;
+    public int getHeartRate() {
+        return heartRate;
     }
 
-    public void setHearthRate(int hearthRate) {
-        this.hearthRate = hearthRate;
+    public void setHeartRate(int hearthRate) {
+        this.heartRate = hearthRate;
     }
 
     public int getSugarLevel() {

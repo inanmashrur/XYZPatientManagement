@@ -1,6 +1,7 @@
 package org.xyz.patientmanagement.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -21,8 +22,9 @@ public class User extends Persistent {
     @SequenceGenerator(name = "userSeq", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
+    @NotBlank
+    @Size(max = 255)
     @Column(unique = true)
-    @NotNull
     private String username;
 
     @Size(min = 6)
@@ -31,9 +33,13 @@ public class User extends Persistent {
     private String salt;
 
     @NotNull
+    @Size(max = 31)
+    @Column(length = 31)
     private String firstName;
 
     @NotNull
+    @Size(max = 31)
+    @Column(length = 31)
     private String lastName;
 
     @NotNull
